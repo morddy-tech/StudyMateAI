@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import { useTheme } from "@/components/theme-provider";
@@ -49,7 +49,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { 
+        duration: 0.5, 
+        ease: [0, 0, 0.58, 1] // Fixed: using cubic-bezier array instead of string
+      },
     },
   };
 
