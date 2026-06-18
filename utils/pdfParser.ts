@@ -15,8 +15,7 @@ export async function extractTextFromPDF(
 
     const arrayBuffer = await file.arrayBuffer();
 
-    // ✅ FIX: Removed 'disableWorker: false'. 
-    // The worker is already enabled via GlobalWorkerOptions!
+    // ✅ FIX: Removed 'disableWorker: false' (TypeScript error fix)
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
     });
@@ -40,8 +39,14 @@ export async function extractTextFromPDF(
       }
     }
 
-    // ✅ FIX: Remove 'await' before destroy (synchronous in v6)
-    pdf.destroy();
+    // ✅ FIX: Re-add 'await' because destroy() is async in v6! 
+    // We wrap it in a try/catch just in case to prevent build failures.
+    try {
+      await pdf.destroy();
+    } catch (cleanupError) {
+      // Just log the cleanup error but don't fail the function, we already have the text.
+      console.warn("PDF cleanup warning:", cleanupError);
+    }
 
     if (!fullText.trim()) {
       throw new Error(
