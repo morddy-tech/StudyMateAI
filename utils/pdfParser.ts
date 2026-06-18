@@ -10,21 +10,13 @@ export async function extractTextFromPDF(
     // ✅ Correct import for pdfjs v6
     const pdfjsLib = await import("pdfjs-dist");
 
-    // ⚠️ IMPORTANT (v6): worker must be imported differently
-    // FIX: Cast to 'any' to satisfy TypeScript's default export check
-    const pdfWorker = (await import("pdfjs-dist/build/pdf.worker.min.mjs")).default as any;
-
-    // We create a blob URL for the worker
-    const workerSrc = URL.createObjectURL(
-      new Blob([pdfWorker], { type: "application/javascript" })
-    );
-
-    // FIX: Use 'workerSrc' string instead of 'workerPort' to avoid type conflicts
-    pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+    // ✅ FIX for Vercel/Turbopack: Load worker from the public folder
+    // IMPORTANT: You must COPY 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs' 
+    // to your project's 'public/' folder for this to work on Vercel!
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
     const arrayBuffer = await file.arrayBuffer();
 
-    // FIX: Use 'data' parameter (the red line in your screenshot might have been a type linting issue)
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
       disableWorker: false, // keep worker ON for performance
@@ -49,7 +41,7 @@ export async function extractTextFromPDF(
       }
     }
 
-    // FIX: Remove 'await' before 'pdf.destroy()' (it's synchronous in v6)
+    // ✅ FIX: Remove 'await' before destroy (it's synchronous in v6)
     pdf.destroy();
 
     if (!fullText.trim()) {
@@ -66,4 +58,17 @@ export async function extractTextFromPDF(
         "Failed to extract text from PDF. Please try another file."
     );
   }
+}
+
+// ✅ NEW: Added the missing TXT extractor so Workspace.tsx import works
+export async function extractTextFromTXT(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      resolve(text);
+    };
+    reader.onerror = () => reject(new Error("Failed to read text file"));
+    reader.readAsText(file);
+  });
 }
