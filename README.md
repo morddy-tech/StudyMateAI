@@ -8,7 +8,7 @@ StudyMate AI is a modern AI-powered learning assistant designed to help students
 
 ## 🚀 Live Demo
 
-🔗 **Live Application:** *(Coming Soon – Vercel)*
+🔗 **Live Application:** *https://study-mate-ai-rose.vercel.app*
 
 ---
 
@@ -82,8 +82,7 @@ styles/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/studymate-ai.git
-cd studymate-ai
+git clone https://github.com/morddy-tech/StudyMateAI.git
 ```
 
 ### 2. Install dependencies
