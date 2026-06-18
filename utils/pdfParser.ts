@@ -10,16 +10,15 @@ export async function extractTextFromPDF(
     // ✅ Correct import for pdfjs v6
     const pdfjsLib = await import("pdfjs-dist");
 
-    // ✅ FIX for Vercel/Turbopack: Load worker from the public folder
-    // IMPORTANT: You must COPY 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs' 
-    // to your project's 'public/' folder for this to work on Vercel!
+    // ✅ Load worker from the public folder (Vercel fix)
     pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
     const arrayBuffer = await file.arrayBuffer();
 
+    // ✅ FIX: Removed 'disableWorker: false'. 
+    // The worker is already enabled via GlobalWorkerOptions!
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
-      disableWorker: false, // keep worker ON for performance
     });
 
     const pdf = await loadingTask.promise;
@@ -41,7 +40,7 @@ export async function extractTextFromPDF(
       }
     }
 
-    // ✅ FIX: Remove 'await' before destroy (it's synchronous in v6)
+    // ✅ FIX: Remove 'await' before destroy (synchronous in v6)
     pdf.destroy();
 
     if (!fullText.trim()) {
@@ -60,7 +59,7 @@ export async function extractTextFromPDF(
   }
 }
 
-// ✅ NEW: Added the missing TXT extractor so Workspace.tsx import works
+// ✅ TXT extractor to match Workspace.tsx import
 export async function extractTextFromTXT(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
