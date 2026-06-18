@@ -1,53 +1,66 @@
-﻿export async function extractTextFromPDF(file: File, onProgress?: (percent: number) => void): Promise<string> {
-  if (typeof window === "undefined") return "";
+export async function extractTextFromPDF(
+  file: File,
+  onProgress?: (percent: number) => void
+): Promise<string> {
+  if (typeof window === "undefined") {
+    throw new Error("PDF parsing only works in the browser.");
+  }
 
   try {
+    // ✅ Correct import for pdfjs v6
     const pdfjsLib = await import("pdfjs-dist");
-    
-    // Set worker path using standard cdnjs matching the package version
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+    // ⚠️ IMPORTANT (v6): worker must be imported differently
+    const pdfWorker = await import("pdfjs-dist/build/pdf.worker.min.mjs");
+
+    pdfjsLib.GlobalWorkerOptions.workerPort = new Worker(
+      URL.createObjectURL(
+        new Blob([pdfWorker as any], { type: "application/javascript" })
+      )
+    );
 
     const arrayBuffer = await file.arrayBuffer();
-    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-    
+
+    const loadingTask = pdfjsLib.getDocument({
+      data: arrayBuffer,
+      disableWorker: false, // keep worker ON for performance
+    });
+
     const pdf = await loadingTask.promise;
-    const numPages = pdf.numPages;
+
     let fullText = "";
 
-    for (let i = 1; i <= numPages; i++) {
+    for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const textContent = await page.getTextContent();
+
       const pageText = textContent.items
-        .map((item: any) => {
-          if ('str' in item) {
-            return item.str;
-          }
-          return '';
-        })
-        .join(" ");
-      fullText += pageText + "\n";
-      
+        .map((item: any) => (item?.str ? item.str : ""))
+        .join(" ")
+        .trim();
+
+      fullText += pageText + "\n\n";
+
       if (onProgress) {
-        onProgress(Math.round((i / numPages) * 100));
+        onProgress(Math.round((i / pdf.numPages) * 100));
       }
     }
 
-    return fullText;
-  } catch (error: any) {
-    console.error("PDF Parsing Error:", error);
-    throw new Error("Could not extract text from the PDF file. Please ensure it is not password-protected or corrupted.");
-  }
-}
+    await pdf.destroy();
 
-export async function extractTextFromTXT(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      resolve((e.target?.result as string) || "");
-    };
-    reader.onerror = () => {
-      reject(new Error("Failed to read the TXT file."));
-    };
-    reader.readAsText(file);
-  });
+    if (!fullText.trim()) {
+      throw new Error(
+        "No selectable text found. This PDF may be scanned or image-based (OCR required)."
+      );
+    }
+
+    return fullText.trim();
+  } catch (error: any) {
+    console.error("PDF Extraction Error:", error);
+
+    throw new Error(
+      error?.message ||
+        "Failed to extract text from PDF. Please try another file."
+    );
+  }
 }
