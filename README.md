@@ -8,7 +8,7 @@ StudyMate AI is a modern AI-powered learning assistant designed to help students
 
 ## 🚀 Live Demo
 
-🔗 **Live Application:** *https://study-mate-ai-rose.vercel.app*
+🔗 **Live Application:** *https://study-mate-ai-psi.vercel.app*
 
 ---
 
