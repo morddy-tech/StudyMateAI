@@ -44,15 +44,12 @@ export default function LandingPage({ onStart }: LandingPageProps) {
     },
   };
 
+  // Simplified item variants without explicit transition
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { 
-        duration: 0.5, 
-        ease: [0, 0, 0.58, 1] // Fixed: using cubic-bezier array instead of string
-      },
+    visible: { 
+      opacity: 1, 
+      y: 0 
     },
   };
 
@@ -195,7 +192,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {/* Feature 1 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <FileText className="w-6 h-6" />
               </div>
@@ -206,7 +207,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </motion.div>
 
             {/* Feature 2 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <Layers className="w-6 h-6" />
               </div>
@@ -217,7 +222,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </motion.div>
 
             {/* Feature 3 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <BookOpen className="w-6 h-6" />
               </div>
@@ -228,7 +237,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </motion.div>
 
             {/* Feature 4 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <HelpCircle className="w-6 h-6" />
               </div>
@@ -239,7 +252,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </motion.div>
 
             {/* Feature 5 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <Cpu className="w-6 h-6" />
               </div>
@@ -250,7 +267,11 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </motion.div>
 
             {/* Feature 6 */}
-            <motion.div variants={itemVariants} className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start">
+            <motion.div 
+              variants={itemVariants} 
+              transition={{ duration: 0.5 }}
+              className="bg-card text-card-foreground p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all flex flex-col items-start"
+            >
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
                 <Download className="w-6 h-6" />
               </div>
