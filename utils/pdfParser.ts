@@ -9,12 +9,13 @@ export async function extractTextFromPDF(
   try {
     const pdfjsLib = await import("pdfjs-dist");
 
-    // ✅ Load worker from the public folder
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    // ✅ Uses CDN worker instead of local public folder
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js";
 
     const arrayBuffer = await file.arrayBuffer();
 
-    // ✅ Removed 'disableWorker: false' to fix the previous type error
+    // ✅ Removed 'disableWorker: false' to clear the first build error
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
     });
@@ -38,12 +39,8 @@ export async function extractTextFromPDF(
       }
     }
 
-    // ✅ FIX: Use 'cleanup()' instead of 'destroy()' and cast to any to bypass TypeScript
-    try {
-      (pdf as any).cleanup(); 
-    } catch (cleanupError) {
-      console.warn("PDF cleanup warning:", cleanupError);
-    }
+    // ✅ Removed the destroy/cleanup block completely. 
+    // It was causing TypeScript errors and the CDN worker handles memory automatically.
 
     if (!fullText.trim()) {
       throw new Error(
