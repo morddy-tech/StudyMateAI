@@ -78,7 +78,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               About
             </button>
             <a 
-              href="https://github.com" 
+              href="https://github.com/morddy-tech/StudyMateAI/tree/main" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="hover:text-primary transition-colors flex items-center space-x-1 text-muted-foreground"
@@ -342,7 +342,9 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             About StudyMate AI
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8">
-            StudyMate AI was built with a clear purpose: to democratize advanced learning strategies. By utilizing cutting-edge Large Language Models, StudyMate AI breaks down dense textbooks, convoluted research, and scattered lecture notes into tailored study kits. It enforces proven learning science techniques—like **spaced repetition**, **active recall**, and the **Feynman technique**—through interactive flashcards, self-grading quizzes, and jargon-free summaries.
+            StudyMate AI was built with a simple mission: to make learning faster, easier, and more accessible. Using modern AI, the platform transforms textbooks, research papers, lecture notes, and meeting transcripts into clear, structured study materials. It helps users understand complex topics through concise summaries, simplified explanations, key concepts, flashcards, quizzes, and organized study guides—making it easier to review, retain, and apply new knowledge.
+            
+            {/*StudyMate AI was built with a clear purpose: to democratize advanced learning strategies. By utilizing cutting-edge Large Language Models, StudyMate AI breaks down dense textbooks, convoluted research, and scattered lecture notes into tailored study kits. It enforces proven learning science techniques—like **spaced repetition**, **active recall**, and the **Feynman technique**—through interactive flashcards, self-grading quizzes, and jargon-free summaries. */}
           </p>
           <div className="inline-flex items-center space-x-2 text-primary font-semibold">
             <Sparkles className="w-5 h-5" />
